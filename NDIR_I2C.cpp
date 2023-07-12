@@ -66,7 +66,8 @@ Please keep the above information when you use this code in your project.
 
 uint8_t NDIR_I2C::cmd_measure[9] = {0xFF, 0x01, 0x9C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63};
 uint8_t NDIR_I2C::cmd_calibrateZero[9] = {0xFF, 0x01, 0x87, 0x00, 0x00, 0x00, 0x00, 0x00, 0x78};
-uint8_t NDIR_I2C::cmd_enableAutoCalibration[9] = {0xFF, 0x01, 0x79, 0xA0, 0x00, 0x00, 0x00, 0x00, 0xE6};
+uint8_t NDIR_I2C::cmd_calibrateSpan[9] = {0xFF, 0x01, 0x88, 0x00, 0x00, 0x00, 0x00, 0x00, 0xA0};
+uint8_t NDIR_I2C::cmd_enableAutoCalibration[9] = {0xFF, 0x01, 0x79, 0x07, 0xD0, 0x00, 0x00, 0x00, 0xE6};
 uint8_t NDIR_I2C::cmd_disableAutoCalibration[9] = {0xFF, 0x01, 0x79, 0x00, 0x00, 0x00, 0x00, 0x00, 0x86};
 
 NDIR_I2C::NDIR_I2C(TwoWire *i2c_bus, uint8_t i2c_addr)
@@ -168,6 +169,21 @@ void NDIR_I2C::calibrateZero()
         {
             delayMicroseconds(1);
             send(cmd_calibrateZero, 9);
+            delay(100);
+        }
+    }
+}
+
+void NDIR_I2C::calibrateSpan(uint16_t span)
+{
+    if (i2c_addr)
+    {
+        if (write_register(FCR, 0x07))
+        {
+            cmd_calibrateSpan[3] = span & 0xFF;
+            cmd_calibrateSpan[4] = (span >> 8) & 0xFF;
+            delayMicroseconds(1);
+            send(cmd_calibrateSpan, 9);
             delay(100);
         }
     }

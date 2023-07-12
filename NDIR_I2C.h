@@ -35,6 +35,7 @@ public:
     uint8_t measure();
     uint8_t reset();
     void calibrateZero();
+    void calibrateSpan(uint16_t span);
     void enableAutoCalibration();
     void disableAutoCalibration();
 
@@ -44,6 +45,7 @@ protected:
 private:
     static uint8_t cmd_measure[9];
     static uint8_t cmd_calibrateZero[9];
+    static uint8_t cmd_calibrateSpan[9];
     static uint8_t cmd_enableAutoCalibration[9];
     static uint8_t cmd_disableAutoCalibration[9];
 
